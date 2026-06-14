@@ -1,0 +1,33 @@
+---
+title: "Which behavioural drivers explain changes in contacts and mobility, and do they improve transmission forecasts beyond observed behaviour?"
+author: "Luke Burton"
+format: docx
+editor: visual
+date: 2026-06-14
+---
+
+# Introduction
+
+## Need
+
+## Gap
+
+## Aims
+
+# Methods
+
+## Data Sources
+
+## Analysis workflow
+
+## Model specification
+
+## Evaluation
+
+## Core outcomes / targets / results
+
+## Supplementary work
+
+## Extensions to consider
+
+# References

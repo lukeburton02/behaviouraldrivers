@@ -1,0 +1,30 @@
+Package: behaviouraldrivers
+Title: Evaluating behavioural drivers of changes in social contacts and mobility during COVID-19
+Version: 0.0.0.1000
+Authors@R:
+  c(person(given = "Luke",
+           family = "Burton",
+           role = c("aut", "cre", "cph"),
+           email = "luke.burton1@student.lshtm.ac.uk",
+           comment = c(ORCID = "0009-0004-3168-0413"))
+           )
+Description: Code to process and analyse behavioural driver data (risk perception, trust, compliance) and model their relationship with social contacts and mobility during COVID-19 in the UK.
+License: MIT + file LICENSE
+URL: https://github.com/lukeburton02/behaviouraldrivers/
+BugReports: https://github.com/lukeburton02/behaviouraldrivers/issues
+Depends:
+    R (>= 4.0.0)
+Imports:
+  dplyr,
+  readr,
+  ggplot2,
+  tidyr,
+  stringr,
+  dlnm,
+  fixest,
+  socialmixr,
+  scoringutils
+Encoding: UTF-8
+Language: en-GB
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
