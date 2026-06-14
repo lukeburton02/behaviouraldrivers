@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+data-raw/**/*.csv
+data-raw/**/*.xlsx
+data-processed/**/*.csv
+.Rbuildignore
