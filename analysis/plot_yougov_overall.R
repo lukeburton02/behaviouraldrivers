@@ -56,7 +56,7 @@ p <- ggplot(yougov_long, aes(x = week_start, y = value)) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b\n%Y") +
   labs(
     title = "YouGov COVID-19 Behavioural Tracker - UK weekly driver time series",
-    subtitle = "Weighted weekly means, April 2020-March 2022. Shaded regions = UK national lockdowns",
+    subtitle = "Weighted survey-wave means, April 2020-March 2022. Shaded regions = UK national lockdowns",
     x = NULL,
     y = NULL,
     caption = "Source: Imperial College London / YouGov COVID-19 Behacioural Tracker"
