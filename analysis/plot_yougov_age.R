@@ -50,7 +50,7 @@ p <- ggplot(yougov_long, aes(x = week_start, y = value, colour = age_group)) +
   scale_colour_brewer(palette = "Dark2", name = "Age group") +
   labs(
     title    = "YouGov COVID-19 Behavioural Tracker - UK weekly drivers by age group",
-    subtitle = "Weighted weekly means, April 2020-March 2022. Shaded regions = UK national lockdowns",
+    subtitle = "Weighted survey-wave means, April 2020-March 2022. Shaded regions = UK national lockdowns",
     x        = NULL,
     y        = NULL,
     caption  = "Source: Imperial College London / YouGov COVID-19 Behavioural Tracker"

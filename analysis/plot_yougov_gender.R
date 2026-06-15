@@ -50,7 +50,7 @@ p <- ggplot(yougov_long, aes(x = week_start, y = value, colour = gender)) +
   scale_colour_manual(values = c("Male" = "#2166ac", "Female" = "#d6604d"), name = "Gender") +
   labs(
     title    = "YouGov COVID-19 Behavioural Tracker - UK weekly drivers by gender",
-    subtitle = "Weighted weekly means, April 2020-March 2022. Shaded regions = UK national lockdowns",
+    subtitle = "Weighted survey-wave means, April 2020-March 2022. Shaded regions = UK national lockdowns",
     x        = NULL,
     y        = NULL,
     caption  = "Source: Imperial College London / YouGov COVID-19 Behavioural Tracker"

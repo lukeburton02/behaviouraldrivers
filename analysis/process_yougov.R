@@ -1,12 +1,19 @@
 # Script to process raw YouGov data
 # Selects key demographic variables for analysis, alongside drivers of interest
 # Includes perceived severity, fear of contracting COVID-19, confidence in NHS etc
-# Saves weighted weekly averages by population-level, age, region and gender
+# Saves weighted survey-wave averages by population-level, age, region and gender
+#
+# Aggregation strategy: group by qweek (native survey wave ID) rather than ISO week.
+# Fieldwork spans ~7 days and straddles ISO week boundaries, so floor_date() splits
+# a single wave across two ISO weeks — the minority stub week (n=1-90) produces
+# extreme weighted means and visible spikes in plots. Each wave is assigned a
+# canonical week_start = the Monday of the ISO week containing the most respondents.
 
-install.packages("tidyverse")
 library(readr)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(lubridate)
+library(stringr)
 
 # Load raw data -------
 yougov_raw <- read_csv("data-raw/yougov/united-kingdom.csv",
@@ -21,6 +28,7 @@ problems(yougov_raw) # Identify unexpected data entry formats (drops entire row?
 yougov <- yougov_raw |>
   dplyr::mutate(date = dmy_hm(endtime)) |>
   dplyr::select(
+    qweek,
     date,
     weight,
     age,
@@ -35,13 +43,13 @@ yougov <- yougov_raw |>
     willing_isolate = i11_health, # "If you were advised to do so by a healthcare professional or public health authority to what extent are you willing or not to self-isolate for 7 days?" 1 = Very willing, 5 = Very unwilling, 99 = Not sure
   )
 
-# Recode categoricals to ordered numerics, and create week_start -----
+# Recode categoricals to ordered numerics -----
 yougov <- yougov |>
   mutate(
     # r1_1 and r1_2 stored as labelled strings sometimes e.g. "1 – Disagree", "7 - Agree" — extract leading digit
-    perceived_severity   = as.numeric(stringr::str_extract(perceived_severity, "^\\d+")),
-    perceived_likelihood = as.numeric(stringr::str_extract(perceived_likelihood, "^\\d+")),
-    week_start = floor_date(date, "week", week_start = 1), # week_start = 1 anchors to Monday, not Sunday (UK convention)
+    perceived_severity   = as.numeric(str_extract(perceived_severity, "^\\d+")),
+    perceived_likelihood = as.numeric(str_extract(perceived_likelihood, "^\\d+")),
+    iso_week = floor_date(date, "week", week_start = 1),
     age_group = cut(age,
       breaks = c(17, 24, 34, 44, 54, 64, Inf),
       labels = c("18-24", "25-34", "35-44", "45-54", "55-64", "65+")
@@ -53,10 +61,10 @@ yougov <- yougov |>
       govt_handling == "Very well"      ~ 4
     ),
     nhs_confidence_num = case_when(
-      nhs_confidense == "No confidence at all"       ~ 1,
-      nhs_confidense == "Not very much confidence"   ~ 2,
+      nhs_confidense == "No confidence at all"        ~ 1,
+      nhs_confidense == "Not very much confidence"    ~ 2,
       nhs_confidense == "A fair amount of confidence" ~ 3,
-      nhs_confidense == "A lot of confidence"        ~ 4
+      nhs_confidense == "A lot of confidence"         ~ 4
     ),
     willing_isolate_num = case_when(
       willing_isolate == "Very unwilling"                ~ 1,
@@ -78,6 +86,17 @@ yougov <- yougov |>
     )
   )
 
+# Assign canonical week_start per qweek -----
+# Use the Monday of whichever ISO week contains the most respondents for that wave.
+wave_dates <- yougov |>
+  count(qweek, iso_week) |>
+  group_by(qweek) |>
+  slice_max(n, n = 1, with_ties = FALSE) |>
+  select(qweek, week_start = iso_week)
+
+yougov <- yougov |>
+  left_join(wave_dates, by = "qweek")
+
 # Helper: weighted mean dropping NAs -----
 wmean <- function(x, w) {
   keep <- !is.na(x) & !is.na(w)
@@ -85,7 +104,7 @@ wmean <- function(x, w) {
   weighted.mean(x[keep], w[keep])
 }
 
-# Weekly aggregates -----
+# Survey-wave aggregates -----
 yougov_weekly <- yougov |>
   group_by(week_start) |>
   summarise(
@@ -149,4 +168,4 @@ write_csv(yougov_weekly_age,    "data-processed/yougov_weekly_age.csv")
 write_csv(yougov_weekly_region, "data-processed/yougov_weekly_region.csv")
 write_csv(yougov_weekly_gender, "data-processed/yougov_weekly_gender.csv")
 
-message("Done. Weeks in aggregate: ", nrow(yougov_weekly))
+message("Done. Survey waves in aggregate: ", nrow(yougov_weekly))
