@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
+Rplots.pdf
 data-raw/**/*.csv
 data-raw/**/*.xlsx
 data-processed/**/*.csv
