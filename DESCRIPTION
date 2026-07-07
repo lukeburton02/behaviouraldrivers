@@ -25,7 +25,9 @@ Imports:
   dlnm,
   fixest,
   socialmixr,
-  scoringutils
+  scoringutils,
+  poLCA,
+  patchwork
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)

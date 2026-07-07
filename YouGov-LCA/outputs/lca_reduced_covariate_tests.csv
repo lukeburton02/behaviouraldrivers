@@ -1,0 +1,4 @@
+model,npar,log_likelihood,lr_stat,df,p_value
+~ age,46,-273177.6645372977,13967.886715031345,2,0
+~ employment_status,56,-273751.193079359,12820.829630908673,12,0
+~ age + gender + employment_status + household_size,74,-272765.46255836874,14792.290672889212,30,0
