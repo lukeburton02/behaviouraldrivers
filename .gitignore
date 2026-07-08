@@ -10,3 +10,5 @@ data-processed/**/*.csv
 .Rbuildignore
 YouGov-LCA/initial_plan.md
 YouGov-LCA/outputs/lca_reduced_analysis_notes.md
+YouGov-LCA/extension_notes.md
+YouGov-LCA/outputs/lca_reduced_yougov_summary.md
